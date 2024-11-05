@@ -2,24 +2,21 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
-    branches: [ "master" ]
+    branches: ["master"]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-    - name: Build the Docker image
-      run: |
-        docker build . --build-arg AZCOPY_VERSION=10.26.0 --file Dockerfile --tag my-image-name:$(date +%s)
-        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/test-az-copy:$(date +%s)
-      
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      - name: Build the Docker image
+        run: |
+          docker build . --build-arg AZCOPY_VERSION=10.26.0 --file Dockerfile --tag test-az-copy:$(date +%s)
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/test-az-copy:$(date +%s)
