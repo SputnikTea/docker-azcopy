@@ -1,10 +1,9 @@
 ARG AZCOPY_VERSION
 ARG GO_VERSION=1.23
 ARG ALPINE_VERSION=3.19
-ARG TARGETARCH
 
 FROM golang:$GO_VERSION-alpine$ALPINE_VERSION as build
-ENV GOARCH=$TARGETARCH GOOS=linux
+ENV GOOS=linux
 WORKDIR /azcopy
 ARG AZCOPY_VERSION
 RUN apk add --no-cache build-base
@@ -13,7 +12,7 @@ RUN tar xf src.tgz --strip 1 \
  && go build -o azcopy \
  && ./azcopy --version
 
-FROM alpine:$ALPINE_VERSION as release
+FROM alpine:$ALPINE_VERSION AS release
 ARG AZCOPY_VERSION
 LABEL name="docker-azcopy"
 LABEL version="$AZCOPY_VERSION"
